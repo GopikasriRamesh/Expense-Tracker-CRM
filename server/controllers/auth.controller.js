@@ -58,7 +58,8 @@ export const loginUser = async (req, res) => {
       return res.status(400).json({ error: "User not exists" });
     }
 
-    if(! await user.comparePassword(password)) return res.status(400).json({ error: "Invalid password" });
+    if (!(await user.comparePassword(password)))
+      return res.status(400).json({ error: "Invalid password" });
 
     const token = generateToken(user._id);
 
