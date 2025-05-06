@@ -47,6 +47,14 @@ export const userValidation = Joi.object({
   fullName: Joi.string().required(),
   email: Joi.string().email().required(),
   password: Joi.string().required(),
+  profileImageUrl: Joi.optional(),
+});
+
+export const userUpdateValidation = Joi.object({
+  fullName: Joi.string().optional(),
+  email: Joi.string().email().optional(),
+  password: Joi.string().optional(),
+  profileImageUrl: Joi.optional(),
 });
 
 export const userLoginValidation = Joi.object({
