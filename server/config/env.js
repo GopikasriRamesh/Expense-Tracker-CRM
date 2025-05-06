@@ -1,5 +1,6 @@
 // config/env.js
 import dotenv from "dotenv";
+import process from "process";
 
 dotenv.config({ path: `.env` });
 
