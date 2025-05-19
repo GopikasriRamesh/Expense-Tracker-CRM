@@ -4,67 +4,56 @@ import User, {
   userLoginValidation,
   userValidation,
 } from "../models/user.model.js";
+import { ApiError } from "../utils/error.js";
 
 const generateToken = (id) =>
   jwt.sign({ id }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
 
 //Register User
-export const registerUser = async (req, res) => {
-  try {
-    const { fullName, email, password, profileImageUrl } = req.body;
+export const registerUser = async (req, res, next, session) => {
+  const { fullName, email, password, profileImageUrl } = req.body;
 
-    const { error } = userValidation.validate(req.body);
+  console.log(req.body);
+  const { error } = userValidation.validate(req.body);
 
-    if (error) {
-      return res.status(400).json({ error: error.message });
-    }
+  if (error) throw new ApiError(400, error.message);
 
-    const user = await User.findOne({ email });
+  const user = await User.findOne({ email });
 
-    if (user) {
-      return res.status(200).json({ error: "User already exists" });
-    }
+  if (user) throw new ApiError(200, "User already exists");
 
-    const newUser = await User.create({
-      fullName,
-      email,
-      password,
-      profileImageUrl,
-    });
+  const newUser = await User.create(
+    [
+      {
+        fullName,
+        email,
+        password,
+        profileImageUrl,
+      },
+    ],
+    { session }
+  )[0];
 
-    const token = generateToken(newUser._id);
+  const token = generateToken(newUser._id);
 
-    res.status(201).json({ user: newUser, token });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: error.message });
-  }
+  res.status(201).json({ user: newUser, token });
 };
 
 export const loginUser = async (req, res) => {
-  try {
-    const { email, password } = req.body;
+  const { email, password } = req.body;
 
-    const { error } = userLoginValidation.validate(req.body);
+  const { error } = userLoginValidation.validate(req.body);
 
-    if (error) {
-      return res.status(400).json({ error: error.message });
-    }
+  if (error) throw new ApiError(400, error.message);
 
-    const user = await User.findOne({ email });
+  const user = await User.findOne({ email });
 
-    if (!user) {
-      return res.status(400).json({ error: "User not exists" });
-    }
+  if (!user) throw new ApiError(400, "User not found");
 
-    if (!(await user.comparePassword(password)))
-      return res.status(400).json({ error: "Invalid password" });
+  if (!(await user.comparePassword(password)))
+    throw new ApiError(400, "Invalid password");
 
-    const token = generateToken(user._id);
+  const token = generateToken(user._id);
 
-    res.status(200).json({ user, token });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: error.message });
-  }
+  res.status(200).json({ user, token });
 };
