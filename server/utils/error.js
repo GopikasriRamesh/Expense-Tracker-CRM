@@ -5,6 +5,8 @@ export const errorHandler = (err, req, res, next) => {
   err.message =
     err.message || "Something went wrong. 500 internal server error";
 
+  if (NODE_ENV === "development") console.log(err);
+
   res.status(err.statusCode).json({
     error: err.message,
     ...(NODE_ENV === "development" && { stack: err.stack }),

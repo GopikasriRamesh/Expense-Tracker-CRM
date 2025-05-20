@@ -7,7 +7,6 @@ export const useTransaction = (fn) => async (req, res, next) => {
     await fn(req, res, next, session);
     await session.commitTransaction();
   } catch (error) {
-    console.log("error reporting")
     await session.abortTransaction();
     next(error);
   } finally {

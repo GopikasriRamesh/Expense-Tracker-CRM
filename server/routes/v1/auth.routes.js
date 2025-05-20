@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { loginUser, registerUser } from "../../controllers/auth.controller.js";
-import { catcher } from "../../utils/asynHandler.js";
-import { useTransaction } from "../../utils/transaction.js";
+import { loginUser, registerUser } from "#controllers/auth.controller.js";
+import { catcher } from "#utils/asynHandler.js";
+import { useTransaction } from "#utils/transaction.js";
 
 const authRoutes = Router();
 
