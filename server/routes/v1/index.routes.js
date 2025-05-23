@@ -7,5 +7,4 @@ const v1Router = Router();
 v1Router.use("/auth", authRoutes);
 v1Router.use("/user", userRoutes);
 
-
 export default v1Router;

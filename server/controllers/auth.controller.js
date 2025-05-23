@@ -13,7 +13,6 @@ const generateToken = (id) =>
 export const registerUser = async (req, res, next, session) => {
   const { fullName, email, password, profileImageUrl } = req.body;
 
-  console.log(req.body);
   const { error } = userValidation.validate(req.body);
 
   if (error) throw new ApiError(400, error.message);
@@ -32,22 +31,20 @@ export const registerUser = async (req, res, next, session) => {
       },
     ],
     { session }
-  )[0];
+  );
 
-  const token = generateToken(newUser._id);
+  const token = generateToken(newUser[0]._id);
 
-  res.status(201).json({ user: newUser, token });
+  res.status(201).json({ user: newUser[0], token });
 };
 
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   const { error } = userLoginValidation.validate(req.body);
-
   if (error) throw new ApiError(400, error.message);
 
   const user = await User.findOne({ email });
-
   if (!user) throw new ApiError(400, "User not found");
 
   if (!(await user.comparePassword(password)))
@@ -56,4 +53,11 @@ export const loginUser = async (req, res) => {
   const token = generateToken(user._id);
 
   res.status(200).json({ user, token });
+};
+
+export const getUser = async (req, res, next) => {
+  console.log(req.user)
+  const user = await User.findById(req.user?.id).select("-password");
+  if (!user) throw new ApiError(400, "User not found");
+  res.status(200).json(user);
 };

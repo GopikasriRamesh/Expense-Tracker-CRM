@@ -1,9 +1,11 @@
-import { NODE_ENV } from "../config/env.js";
+import { NODE_ENV } from "#config/env.js";
 
 export const errorHandler = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.message =
     err.message || "Something went wrong. 500 internal server error";
+
+  if (NODE_ENV === "development") console.log(err);
 
   res.status(err.statusCode).json({
     error: err.message,

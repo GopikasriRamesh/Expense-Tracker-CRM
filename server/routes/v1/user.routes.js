@@ -1,14 +1,20 @@
 import { Router } from "express";
-import { deleteUser, getAllUsers, getUser, updateUser } from "../../controllers/user.controller.js";
+import {
+  deleteUser,
+  getAllUsers,
+  getUser,
+  updateUser,
+} from "#controllers/user.controller.js";
+import { catcher } from "#root/utils/asynHandler.js";
 
 const userRoutes = Router();
 
-userRoutes.get("/", getAllUsers);
+userRoutes.get("/", catcher(getAllUsers));
 
-userRoutes.get("/:id", getUser);
+userRoutes.get("/:id", catcher(getUser));
 
-userRoutes.put("/:id", updateUser);
+userRoutes.put("/:id", catcher(updateUser));
 
-userRoutes.delete("/:id", deleteUser);
+userRoutes.delete("/:id", catcher(deleteUser));
 
 export default userRoutes;

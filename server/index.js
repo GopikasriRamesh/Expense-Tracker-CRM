@@ -1,9 +1,9 @@
 import express from "express";
 import cors from "cors";
-import { CLIENT_URL, PORT } from "./config/env.js";
+import { CLIENT_URL, PORT } from "#config/env.js";
 import connectDB from "./db/mongo.js";
-import v1Router from "./routes/v1/index.routes.js";
-import { errorHandler } from "./utils/error.js";
+import v1Router from "#routes/v1/index.routes.js";
+import { errorHandler } from "#utils/error.js";
 
 const app = express();
 

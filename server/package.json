@@ -10,6 +10,16 @@
     "release:minor": "standard-version --release-as minor",
     "release:major": "standard-version --release-as major"
   },
+  "imports": {
+    "#root/*": "./*",
+    "#controllers/*": "./controllers/*",
+    "#models/*": "./models/*",
+    "#utils/*": "./utils/*",
+    "#routes/*": "./routes/*",
+    "#config/*": "./config/*",
+    "#services/*": "./services/*",
+    "#middlewares/*": "./middlewares/*"
+  },
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
