@@ -1,3 +1,4 @@
+import { streamImageFromGridFS } from "#root/services/gridfs.service.js";
 import User, { userUpdateValidation } from "../models/user.model.js";
 
 
@@ -65,4 +66,9 @@ export const deleteUser = async (req, res) => {
     console.log(error);
     res.status(500).json({ error: error.message });
   }
+};
+
+export const getImage = async (req, res) => {
+  const { id } = req.params;
+  streamImageFromGridFS(id, res);
 };
