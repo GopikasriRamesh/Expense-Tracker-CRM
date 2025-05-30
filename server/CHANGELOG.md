@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/GopikasriRamesh/Expense-Tracker-CRM/compare/v1.2.0...v1.3.0) (2025-05-30)
+
+
+### Features
+
+* implemented gridfs for fetch image from db ([9b33e2e](https://github.com/GopikasriRamesh/Expense-Tracker-CRM/commit/9b33e2e78aebe6e8236e645f747f473d2f1531c8))
+
 ## [1.2.0](https://github.com/GopikasriRamesh/Expense-Tracker-CRM/compare/v1.1.0...v1.2.0) (2025-05-06)
 
 
