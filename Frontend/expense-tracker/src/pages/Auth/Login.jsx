@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
-import { useNavigate ,Link } from 'react-router-dom';
+import React, { useState, useContext } from 'react'; // ✅ import useContext
+import { useNavigate, Link } from 'react-router-dom';
 import AuthLayout from '../../components/Layout/AuthLayout';
 import Input from '../../components/Layout/Inputs/Input'; 
 import { validateEmail } from '../../utils/helper';
+import axiosInstance from '../../utils/axiosInstance';
+import { API_PATHS } from '../../utils/apiPaths';
+import { UserContext } from '../../context/userContext'; // ✅ ensure this is exported properly
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -10,21 +13,41 @@ const Login = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const { updateUser } = useContext(UserContext); // ✅ correct usage
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    
-    if(!validateEmail(email)) {
+
+    if (!validateEmail(email)) {
       setError('Please enter a valid email address.');
       return;
     }
-    if(!password) {
+    if (!password) {
       setError('Password cannot be empty.');
       return;
     }
-    setError(''); 
+    setError('');
 
-    //Login API call
+    try {
+      const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, {
+        email,
+        password,
+      });
 
+      const { token, user } = response.data;
+
+      if (token) {
+        localStorage.setItem('token', token);
+        updateUser(user); // ✅ update context
+        navigate('/dashboard');
+      }
+    } catch (err) {
+      if (err.response && err.response.data) {
+        setError(err.response.data.message || 'Login failed. Please try again.');
+      } else {
+        setError('An unexpected error occurred. Please try again later.');
+      }
+    }
   };
 
   return (
@@ -53,7 +76,6 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Min 8 characters"
           />
-        
 
           <button
             type="submit"
@@ -61,13 +83,15 @@ const Login = () => {
           >
             Login
           </button>
+
           <p className="text-[13px] text-slate-800 mt-3">
             Don't have an account?{' '}
-            <Link className='font-medium text-purple-600 underline' to="/signup">
+            <Link className="font-medium text-purple-600 underline" to="/signup">
               SignUp
-            </Link></p>
+            </Link>
+          </p>
         </form>
-       </div>
+      </div>
     </AuthLayout>
   );
 };

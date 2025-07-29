@@ -12,7 +12,7 @@ const { get } = require('mongoose');
 const router = express.Router();
 
 router.post('/add', protect, addExpense);
-router.get('/all', protect, getAllExpense);
+router.get('/get', protect, getAllExpense);
 router.delete('/:id', protect, deleteExpense);
 router.get('/downloadexcel', protect, downloadExpenseExcel);
 

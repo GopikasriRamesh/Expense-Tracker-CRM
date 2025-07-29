@@ -1,39 +1,50 @@
-import React from 'react'
-import{
+import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
 } from "react-router-dom";
+
 import Login from './pages/Auth/Login';
 import SignUp from './pages/Auth/SignUp';
 import Home from './pages/Dashboard/Home';
-import Income from './pages/Dashboard/income';
+import Income from './pages/Dashboard/Income';
 import Expense from './pages/Dashboard/Expense';
+import UserProvider from './context/UserContext';
+import DashboardLayout from './components/Layout/DashboardLayout';
+import { Toaster } from 'react-hot-toast';
+
 const App = () => {
   return (
-    <div>
+    <UserProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<Root />}/>
-          <Route path="/login" exact element={<Login />} />
+          <Route path="/" element={<Root />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/dashboard" element={<Home />}/>
-            <Route path="/income" element={<Income />} />
-            <Route path="/expense" element={<Expense />} />
+
+          {/* ✅ Nested routes inside DashboardLayout using Outlet */}
+          <Route path="/" element={<DashboardLayout />}>
+            <Route path="dashboard" element={<Home />} />
+            <Route path="income" element={<Income />} />
+            <Route path="expense" element={<Expense />} />
+          </Route>
         </Routes>
       </Router>
-    </div>
-  )
-}
 
-export default App
+      <Toaster
+        toastOptions={{
+          className: "",
+          style: { fontSize: '13px' }
+        }}
+      />
+    </UserProvider>
+  );
+};
 
-const Root = ()=>{
-  //check if user is authenticated
+export default App;
+
+const Root = () => {
   const isAuthenticated = !!localStorage.getItem('token');
-  
-  //redirect to login if not authenticated
   return isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/login" />;
-
-}
+};
